@@ -86,6 +86,7 @@ export default function Dashboard() {
             { href: "/dashboard/cover-letter", icon: "✉️", label: "Cover Letter" },
             { href: "/dashboard/interview-prep", icon: "🎯", label: "Interview Prep" },
             { href: "/dashboard/job-matcher", icon: "🎯", label: "Job Matcher" },
+            { href: "/dashboard/tracker", icon: "📊", label: "App Tracker" },
           ].map((item) => (
             <Link
               key={item.href}
@@ -161,6 +162,13 @@ export default function Dashboard() {
           <h3 className="font-semibold text-[#111] mb-1.5">Job Matcher</h3>
           <p className="text-gray-500 text-sm leading-relaxed mb-5">Paste your resume and get matched with real job openings on LinkedIn, Naukri, Indeed and more.</p>
           <span className="text-green-600 text-sm font-medium group-hover:underline">Find jobs →</span>
+        </Link>
+
+        <Link href="/dashboard/tracker" className="tool-card group">
+          <div className="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center text-2xl mb-5">📊</div>
+          <h3 className="font-semibold text-[#111] mb-1.5">Application Tracker</h3>
+          <p className="text-gray-500 text-sm leading-relaxed mb-5">Track every job you apply to. Monitor status, follow-ups, and never lose track of an opportunity.</p>
+          <span className="text-orange-600 text-sm font-medium group-hover:underline">Track now →</span>
         </Link>
 
         {/* Stats */}
