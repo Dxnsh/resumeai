@@ -1,8 +1,10 @@
 "use client";
 import { useState } from "react";
+import { createClient } from "@/lib/supabase";
 import Link from "next/link";
 
 export default function JobMatcher() {
+  const [savedJobs, setSavedJobs] = useState({});
   const [resume, setResume] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -31,9 +33,24 @@ export default function JobMatcher() {
     setLoading(false);
   };
 
+  const saveToTracker = async (jobTitle, companyHint, portalName, url) => {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    await supabase.from("applications").insert({
+      user_id: user.id,
+      company_name: companyHint || portalName,
+      job_title: jobTitle,
+      job_url: url,
+      status: "Applied",
+      applied_date: new Date().toISOString().split("T")[0],
+      notes: `Found via ResumeAI Job Matcher on ${portalName}`,
+    });
+    setSavedJobs(prev => ({ ...prev, [`${jobTitle}-${portalName}`]: true }));
+  };
+
   const generateJobLinks = (jobTitle, skills) => {
-    const query = encodeURIComponent(`${jobTitle}`);
-    const skillQuery = encodeURIComponent(skills.slice(0, 3).join(" "));
+    const query = encodeURIComponent(jobTitle);
     return [
       {
         name: "LinkedIn",
@@ -112,6 +129,7 @@ export default function JobMatcher() {
           text-decoration: none;
           transition: all 0.2s;
           font-family: 'DM Sans', sans-serif;
+          cursor: pointer;
         }
         .portal-btn:hover {
           transform: translateY(-1px);
@@ -183,7 +201,6 @@ export default function JobMatcher() {
               ) : "Find my job matches →"}
             </button>
 
-            {/* How it works */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
               {[
                 { step: "01", title: "Paste resume", desc: "Copy your resume text and paste it above" },
@@ -206,7 +223,7 @@ export default function JobMatcher() {
                   Your job matches
                 </h1>
                 <p className="text-gray-500 text-sm">
-                  Found {result.job_categories.length} job matches for {result.candidate_name}
+                  Found {result.job_categories.length} matches for {result.candidate_name}
                 </p>
               </div>
               <button
@@ -289,7 +306,6 @@ export default function JobMatcher() {
                     </div>
                   </div>
 
-                  {/* Match score bar */}
                   <div className="mb-5">
                     <div className="flex items-center justify-between mb-1.5">
                       <span className="text-xs text-gray-400">Match score</span>
@@ -297,7 +313,7 @@ export default function JobMatcher() {
                     </div>
                     <div className="bg-gray-100 rounded-full h-1.5">
                       <div
-                        className="h-1.5 rounded-full transition-all"
+                        className="h-1.5 rounded-full"
                         style={{
                           width: `${job.match_score}%`,
                           background: job.match_score >= 90 ? '#22c55e' : job.match_score >= 75 ? '#f59e0b' : '#ef4444'
@@ -310,22 +326,40 @@ export default function JobMatcher() {
                   <div>
                     <p className="text-xs text-gray-400 mb-3">Apply on</p>
                     <div className="flex flex-wrap gap-2">
-                      {generateJobLinks(job.title, job.required_skills).map((portal) => (
-                        <a
-                            key={portal.name}
-                            href={portal.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="portal-btn"
-                            style={{ background: portal.bg, color: portal.color }}
-                        >
-                            {portal.icon} {portal.name}
-                        </a>
-                        ))}
+                      {generateJobLinks(job.title, job.required_skills).map((portal) => {
+                        const key = `${job.title}-${portal.name}`;
+                        const saved = savedJobs[key];
+                        return (
+                          <div key={portal.name} className="flex items-center gap-1">
+                            
+                             <a href={portal.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => saveToTracker(job.title, portal.name, portal.name, portal.url)}
+                              className="portal-btn"
+                              style={{ background: portal.bg, color: portal.color }}
+                            >
+                              {portal.icon} {portal.name}
+                            </a>
+                            {saved && (
+                              <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded-lg border border-green-100">
+                                ✓ Saved
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
+                    <p className="text-xs text-gray-400 mt-2">
+                      ✨ Clicking apply automatically saves to your{" "}
+                      <Link href="/dashboard/tracker" className="text-indigo-600 hover:underline">
+                        Application Tracker
+                      </Link>
+                    </p>
                   </div>
                 </div>
               ))}
+              
             </div>
           </>
         )}
