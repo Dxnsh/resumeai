@@ -87,6 +87,8 @@ export default function Dashboard() {
             { href: "/dashboard/interview-prep", icon: "🎯", label: "Interview Prep" },
             { href: "/dashboard/job-matcher", icon: "🎯", label: "Job Matcher" },
             { href: "/dashboard/tracker", icon: "📊", label: "App Tracker" },
+            { href: "/dashboard/resume-builder", icon: "📝", label: "Resume Builder" },
+            { href: "/dashboard/jobs", icon: "💼", label: "Live Jobs" },
           ].map((item) => (
             <Link
               key={item.href}
@@ -169,6 +171,20 @@ export default function Dashboard() {
           <h3 className="font-semibold text-[#111] mb-1.5">Application Tracker</h3>
           <p className="text-gray-500 text-sm leading-relaxed mb-5">Track every job you apply to. Monitor status, follow-ups, and never lose track of an opportunity.</p>
           <span className="text-orange-600 text-sm font-medium group-hover:underline">Track now →</span>
+        </Link>
+
+        <Link href="/dashboard/resume-builder" className="tool-card group">
+          <div className="w-12 h-12 bg-yellow-50 rounded-xl flex items-center justify-center text-2xl mb-5">📝</div>
+          <h3 className="font-semibold text-[#111] mb-1.5">Resume Builder</h3>
+          <p className="text-gray-500 text-sm leading-relaxed mb-5">Generate a professional ATS-optimized resume and download it as a PDF instantly.</p>
+          <span className="text-yellow-600 text-sm font-medium group-hover:underline">Build now →</span>
+        </Link>
+
+        <Link href="/dashboard/jobs" className="tool-card group">
+          <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-2xl mb-5">💼</div>
+          <h3 className="font-semibold text-[#111] mb-1.5">Live Job Listings</h3>
+          <p className="text-gray-500 text-sm leading-relaxed mb-5">Search real job openings from LinkedIn, Indeed and Glassdoor — all in one place with one-click apply.</p>
+          <span className="text-blue-600 text-sm font-medium group-hover:underline">Search jobs →</span>
         </Link>
 
         {/* Stats */}
