@@ -15,6 +15,9 @@ export const metadata = {
   title: "ResumeAI — Free ATS Resume Scanner & Cover Letter Generator",
   description: "Beat ATS filters, optimize your resume, and generate personalized cover letters in seconds. Free AI-powered tool for job seekers.",
   keywords: "ATS resume scanner, free resume checker, AI cover letter generator, resume optimizer, job application tool",
+  verification: {
+    google: "cuxq8YsVtrcKhWcarmgmWZ6SLfP9lBJPDSpjA8AtABQ",
+  },
   openGraph: {
     title: "ResumeAI — Free ATS Resume Scanner & Cover Letter Generator",
     description: "Beat ATS filters and land more interviews with AI. Free resume scanner and cover letter generator.",
