@@ -119,7 +119,7 @@ export default function SignupPage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Dinesh Patil"
+                placeholder="john darik"
                 className="text-input"
               />
             </div>
