@@ -85,6 +85,7 @@ export default function Dashboard() {
             { href: "/dashboard/resume-scanner", icon: "📄", label: "Resume Scanner" },
             { href: "/dashboard/cover-letter", icon: "✉️", label: "Cover Letter" },
             { href: "/dashboard/interview-prep", icon: "🎯", label: "Interview Prep" },
+            { href: "/dashboard/job-matcher", icon: "🎯", label: "Job Matcher" },
           ].map((item) => (
             <Link
               key={item.href}
@@ -154,6 +155,13 @@ export default function Dashboard() {
             <span className="text-cyan-600 text-sm font-medium group-hover:underline">Prepare now →</span>
           </Link>
         </div>
+
+        <Link href="/dashboard/job-matcher" className="tool-card group">
+          <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-2xl mb-5">🎯</div>
+          <h3 className="font-semibold text-[#111] mb-1.5">Job Matcher</h3>
+          <p className="text-gray-500 text-sm leading-relaxed mb-5">Paste your resume and get matched with real job openings on LinkedIn, Naukri, Indeed and more.</p>
+          <span className="text-green-600 text-sm font-medium group-hover:underline">Find jobs →</span>
+        </Link>
 
         {/* Stats */}
         <div className="mb-10">
