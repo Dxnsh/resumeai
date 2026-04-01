@@ -89,6 +89,7 @@ export default function Dashboard() {
             { href: "/dashboard/tracker", icon: "📊", label: "App Tracker" },
             { href: "/dashboard/resume-builder", icon: "📝", label: "Resume Builder" },
             { href: "/dashboard/jobs", icon: "💼", label: "Live Jobs" },
+            { href: "/dashboard/hr-outreach", icon: "📧", label: "HR Outreach" },
           ].map((item) => (
             <Link
               key={item.href}
@@ -187,6 +188,13 @@ export default function Dashboard() {
           <span className="text-blue-600 text-sm font-medium group-hover:underline">Search jobs →</span>
         </Link>
 
+            <Link href="/dashboard/hr-outreach" className="tool-card group">
+            <div className="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center text-2xl mb-5">📧</div>
+            <h3 className="font-semibold text-[#111] mb-1.5">HR Outreach</h3>
+            <p className="text-gray-500 text-sm leading-relaxed mb-5">Find real HRs on LinkedIn and send AI-written personalized cold emails directly from Gmail.</p>
+            <span className="text-pink-600 text-sm font-medium group-hover:underline">Start outreach →</span>
+          </Link>
+          
         {/* Stats */}
         <div className="mb-10">
           <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-4">Your activity</h2>
