@@ -1,10 +1,20 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { validateInput, errorResponse, successResponse, withTimeout, sanitizeInput } from "@/lib/api-helper";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export async function POST(request) {
   try {
-    const { personalInfo, jobDescription } = await request.json();
+    const body = await request.json().catch(() => null);
+    if (!body) return errorResponse("Invalid request body", 400);
+
+    const { personalInfo, jobDescription } = body;
+
+    const validation = validateInput({ personalInfo });
+    if (!validation.valid) return errorResponse(validation.error, 400);
+
+    const cleanInfo = sanitizeInput(personalInfo);
+    const cleanJD = sanitizeInput(jobDescription || "General software/tech role");
 
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
@@ -51,20 +61,23 @@ Respond in this exact JSON format with no extra text, no markdown, no backticks:
 }
 
 CANDIDATE INFO:
-${personalInfo}
+${cleanInfo}
 
 TARGET JOB DESCRIPTION:
-${jobDescription || "General software/tech role"}`;
+${cleanJD}`;
 
-    const result = await model.generateContent(prompt);
+    const result = await withTimeout(model.generateContent(prompt), 25000);
     const responseText = result.response.text();
     const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error("Invalid response format");
-    const parsed = JSON.parse(jsonMatch[0]);
+    if (!jsonMatch) return errorResponse("Failed to parse AI response", 500);
 
-    return Response.json(parsed);
+    const parsed = JSON.parse(jsonMatch[0]);
+    return successResponse(parsed);
+
   } catch (error) {
-    console.error("Error:", error);
-    return Response.json({ error: "Failed to build resume" }, { status: 500 });
+    console.error("[build-resume]", error.message);
+    if (error.message === "Request timeout") return errorResponse("Request timed out. Please try again.", 408);
+    if (error.status === 429) return errorResponse("AI service is busy. Please wait 30 seconds.", 429);
+    return errorResponse("Failed to build resume. Please try again.", 500);
   }
 }
