@@ -126,17 +126,17 @@ export default function ResumeBuilder() {
                   value={personalInfo}
                   onChange={(e) => setPersonalInfo(e.target.value)}
                       placeholder={`Example:
-                        Name: Dinesh Patil
-                        Email: dinesh@gmail.com
+                        Name: john Mark
+                        Email: John@gmail.com
                         Phone: 9876543210
                         Location: Pune, Maharashtra
 
                         Education:
-                        MCA - Pursuing 2024-Present, CGPA 8.5
+                        MBA - Pursuing 2024-Present, CGPA 8.5
                         BCA - 2021-2024, CGPA 7.8
 
                         Skills:
-                        React, Node.js, MongoDB, Python, Git
+                        React, Node.js, MongoDB, Python, Git,Communication
 
                         Experience:
                         Intern at XYZ Company - Built REST APIs
